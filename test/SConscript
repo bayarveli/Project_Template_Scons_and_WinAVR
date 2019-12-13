@@ -1,0 +1,39 @@
+Import('env')
+
+# Build main.c file with libraries
+BuildWithLibEnv = env.Clone()
+
+Executable_Name = 'libraryUsage'
+
+Source_Files = [
+	'main.c'
+	]
+
+
+Libs = []
+CppPath = []
+LibPath = []
+
+CppPath.append('#source')
+CppPath.append('#lib')
+
+Libs.append('uartLib')
+Libs.append('gpioLib')
+
+LibPath.append('#lib')
+
+BuildWithLibEnv.Append(CPPPATH=CppPath)
+BuildWithLibEnv.Append(LIBS=Libs)
+BuildWithLibEnv.Append(LIBPATH=LibPath)
+
+program = BuildWithLibEnv.createExecutable(executableName=Executable_Name, outputDirectory = '../build', sourceFiles = Source_Files)
+
+
+# Build only main.c file
+BuildAlone = env.Clone()
+
+Executable_Name = 'onlyMain'
+
+BuildAlone.Append(CPPDEFINES = ['NOLIB=0'])
+
+program = BuildAlone.createExecutable(executableName=Executable_Name, outputDirectory = '../buildAlone', sourceFiles = Source_Files)
